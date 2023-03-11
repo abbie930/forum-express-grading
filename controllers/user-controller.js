@@ -44,7 +44,7 @@ const userController = {
   getUser: (req, res, next) => {
     const userId = req.params.id
     return Promise.all([
-      User.findByPk(userId, { raw: true }),
+      User.findByPk(userId),
       Comment.findAll({
         // 查詢符合 userId 的評論
         where: { userId },
@@ -58,10 +58,11 @@ const userController = {
         raw: true
       })
     ])
-      .then(([user, comments]) => {
-        if (!user) throw new Error("User didn't exist!")
-        res.render('users/profile', {
-          user,
+      .then(([userProfile, comments]) => {
+        if (!userProfile) throw new Error("User didn't exist!")
+        return res.render('users/profile', {
+          user: getUser(req),
+          userProfile: userProfile.toJSON(),
           comments
         })
       })
