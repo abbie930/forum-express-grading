@@ -9,6 +9,9 @@
           <h2 class="card-title">{{userProfile.name}}</h2>
           <p class="card-text">{{userProfile.email}}</p>
           <p class="mt-4"><strong>{{comments.length}}&nbsp&nbsp</strong>已評論餐廳</p>
+          <p class="mt-2"><strong>{{userProfile.FavoritedRestaurants.length}}&nbsp&nbsp</strong>收藏的餐廳</p>
+          <p class="mt-2"><strong>{{userProfile.Followings.length}}&nbsp&nbsp</strong>Followings追蹤中</p>
+          <p class="mt-2"><strong>{{userProfile.Followers.length}}&nbsp&nbsp</strong>Followers粉絲</p>
           {{#ifCond userProfile.id user.id }}
           <a href="/users/{{user.id}}/edit" class="btn btn-secondary">Edit</a>
           {{/ifCond}}
@@ -16,20 +19,79 @@
       </div>
     </div>
   </div>
-  <div class="card mt-4">
-    <div class="card-header">
-      <strong>{{comments.length}}&nbsp&nbsp</strong>已評論餐廳
+
+  <div class="row">
+    <div class="col-md-4">
+      {{!-- Following 追蹤中 --}}
+      <div class="card mt-4">
+        <div class="card-header">
+          <strong>{{userProfile.Followings.length}}&nbsp&nbsp</strong>Followings追蹤中
+        </div>
+        <div class="card-body">
+          {{#if userProfile.Followings.length}}
+            {{#each userProfile.Followings}}
+            <a href="/users/{{this.id}}" class="me-2" style="text-decoration:none;">
+              <img class="img-thumbnail" src="{{this.image}}" style="width: 100px; height:100px" alt="{{this.name}}">
+            </a>
+            {{/each}}
+          {{else}}
+            <p class="mt-4"><strong>目前沒有追蹤任何用戶</strong></p>
+          {{/if}}
+        </div>
+      </div>
+      {{!-- Follower 追蹤者 --}}
+      <div class="card mt-4">
+        <div class="card-header">
+          <strong>{{userProfile.Followers.length}}&nbsp&nbsp</strong>Followers粉絲
+        </div>
+        <div class="card-body">
+          {{#if userProfile.Followers.length}}
+            {{#each userProfile.Followers}}
+            <a href="/users/{{this.id}}" class="me-2" style="text-decoration:none;">
+              <img class="img-thumbnail" src="{{this.image}}" style="width: 100px; height:100px" alt="{{this.name}}">
+            </a>
+            {{/each}}
+          {{else}}
+            <p class="mt-4"><strong>目前您還沒有任何追蹤者</strong>
+          {{/if}}
+        </div>
+      </div>
     </div>
-    <div class="card-body">
-      {{#if comments.length}}
-        {{#each comments}}
-        <a href="/restaurants/{{this.Restaurant.id}}" class="me-2" style="text-decoration:none;">
-          <img class="img-thumbnail" src="{{this.Restaurant.image}}" style="width: 100px; height:100px" alt="{{this.Restaurant.name}}">
-        </a>
-        {{/each}}
-      {{else}}
-        <p class="mt-4"><strong>目前沒有任何評論紀錄</strong><br>趕快前往餐廳頁面，分享您的用餐體驗吧!<br></p>
-      {{/if}}
+    <div class="col-md-8">
+      {{!-- Commented restaurants --}}
+      <div class="card mt-4">
+        <div class="card-header">
+          <strong>{{comments.length}}&nbsp&nbsp</strong>已評論餐廳
+        </div>
+        <div class="card-body">
+          {{#if comments.length}}
+            {{#each comments}}
+            <a href="/restaurants/{{this.Restaurant.id}}" class="me-2" style="text-decoration:none;">
+              <img class="img-thumbnail" src="{{this.Restaurant.image}}" style="width: 100px; height:100px" alt="{{this.Restaurant.name}}">
+            </a>
+            {{/each}}
+          {{else}}
+            <p class="mt-4"><strong>目前沒有任何評論紀錄</strong><br>趕快前往餐廳頁面，分享您的用餐體驗吧!<br></p>
+          {{/if}}
+        </div>
+      </div>
+      {{!-- Favorited restaurants --}}
+      <div class="card mt-4">
+        <div class="card-header">
+          <strong>{{userProfile.FavoritedRestaurants.length}}&nbsp&nbsp</strong>收藏的餐廳
+        </div>
+        <div class="card-body">
+          {{#if userProfile.FavoritedRestaurants.length}}
+            {{#each userProfile.FavoritedRestaurants}}
+            <a href="/restaurants/{{this.id}}" class="me-2" style="text-decoration:none;">
+              <img class="img-thumbnail" src="{{this.image}}" style="width: 100px; height:100px" alt="{{this.name}}">
+            </a>
+            {{/each}}
+          {{else}}
+            <p class="mt-4"><strong>目前沒有任何收藏紀錄</strong><br>趕快前往餐廳頁面，收藏餐廳吧!<br></p>
+          {{/if}}
+        </div>
+      </div>
     </div>
   </div>
 </div>

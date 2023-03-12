@@ -44,7 +44,13 @@ const userController = {
   getUser: (req, res, next) => {
     const userId = req.params.id
     return Promise.all([
-      User.findByPk(userId),
+      User.findByPk(userId, {
+        include: [
+          { model: Restaurant, as: 'FavoritedRestaurants' },
+          { model: User, as: 'Followings' },
+          { model: User, as: 'Followers' }
+        ]
+      }),
       Comment.findAll({
         // 查詢符合 userId 的評論
         where: { userId },
@@ -190,7 +196,10 @@ const userController = {
             isFollowed: req.user.Followings.some(f => f.id === user.id)
           }))
           .sort((a, b) => b.followerCount - a.followerCount)
-        res.render('top-users', { users: result })
+        res.render('top-users', {
+          user: getUser(req),
+          users: result
+        })
       })
       .catch(err => next(err))
   },
